@@ -1,24 +1,36 @@
 var User = require('../models/User');
+var {session} = require('passport')
 module.exports = {
     loggedInUser : (req,res,next) => {
         if(req.session && req.session.userId){
+            next();
+        }else if(req.session && req.session.passport){
             next();
         }else{
             res.redirect('/users/login')
         }
     },
     userInfo : (req,res,next) => {
-        var userId = req.session && req.session.userId;
-        if(userId){
+        if(req.session.userId){
+            var userId = req.session && req.session.userId;
             User.findById(userId, "name email", (err,user) => {
                 if(err) return next(err)
                 req.user = user;
-                req.session.user =user;
+                res.locals.user = user;
                 next();
             })
-        }else {
+        }else if(req.session.passport){
+            var userId = req.session.passport && req.session.passport.user;
+            User.findById(userId, "name email", (err,user) => {
+                if(err) return next(err)
+                req.user = user;
+                res.locals.user = user;
+                next();
+            })
+        }
+        else {
             req.user = null;
-            req.session.user = null
+            res.locals.user = null
             next();
         }
     }

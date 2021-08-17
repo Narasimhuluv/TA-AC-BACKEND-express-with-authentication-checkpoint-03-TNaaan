@@ -6,10 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Express and Incomes</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
-    <header>
-
+    <header class="bg-blue-900 flex justify-between items-center px-5 py-2 rounded ">
+        <a href="/" class="text-3xl pl-5">
+            <h2 class="text-white">Expense - Incomes</h2>
+            <% if(user) {%>
+                <h2><%=user.name %> </h2>
+            <% } else{ %>
+                <h2>Login</h2>
+            <% } %> 
+        </a>
     </header>
     
 

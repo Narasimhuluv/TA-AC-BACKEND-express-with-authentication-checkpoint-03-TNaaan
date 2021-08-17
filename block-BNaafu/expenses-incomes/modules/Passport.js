@@ -37,6 +37,38 @@ passport.use(new GitHubStrategy({
 ));
 
 
+// Google Strategy
+
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log(profile)
+    var profileData = {
+        name : profile._json.name,
+        email : profile._json.email,
+        photo : profile._json.picture,
+    }
+
+    User.findOne({email: profile._json.email}, (err,user) => {
+        if(err) return cb(err);
+        if(!user){
+            User.create(profileData, (err, addeduser)=> {
+                if(err) return cb(err);
+                return cb(null, addeduser)
+            })
+        }else{
+            cb(null, user)
+        }
+    })
+  }
+));
+
+
 passport.serializeUser(function(user, done) {
     done(null, user.id);
   });

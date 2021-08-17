@@ -7,15 +7,18 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo');
 var flash = require('connect-flash')
+var passport = require('passport')
 
 
-var dotenv = require('dotenv').config();
+require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var clientRouter = require('./routes/client')
+var clientRouter = require('./routes/client');
+var incomeRouter = require('./routes/income');
+var expenseRouter = require('./routes/expense');
 var auth = require('./middlewares/Auth')
-var passport = require('passport')
+
 
 
 // connecting to Database 
@@ -23,7 +26,7 @@ mongoose.connect('mongodb://localhost/expenses-incomes', {useNewUrlParser : true
   console.log(err ? err : "Connected to Database")
 })
 
-var passportData = require('./modules/Passport')
+require('./modules/Passport')
 
 var app = express();
 
@@ -44,17 +47,24 @@ app.use(session({
   saveUninitialized : false,
   store : MongoStore.create({mongoUrl : 'mongodb://localhost/expenses-incomes'})
 }))
-app.use(passport.initialize())
-app.use(passport.session())
+
 
 // connecting to flash error messgages
 app.use(flash())
 
 
-app.use(auth.userInfo)
+app.use(auth.userInfo);
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/client', clientRouter)
+
+app.use('/income', incomeRouter);
+app.use('/expense', expenseRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
