@@ -9,6 +9,7 @@ var userSchema = new Schema({
     age : {type : Number},
     phone : {type : String},
     country : {type : String},
+    isVerified : {type : Boolean, default : false}
 }, {timestamps : true})
 
 userSchema.pre('save', function(next){
