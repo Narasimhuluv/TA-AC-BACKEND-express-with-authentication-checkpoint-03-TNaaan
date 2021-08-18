@@ -13,7 +13,7 @@ module.exports = {
     userInfo : (req,res,next) => {
         if(req.session.userId){
             var userId = req.session && req.session.userId;
-            User.findById(userId, "name email", (err,user) => {
+            User.findById(userId, "name email photo age  email country", (err,user) => {
                 if(err) return next(err)
                 req.user = user;
                 res.locals.user = user;
@@ -21,7 +21,7 @@ module.exports = {
             })
         }else if(req.session.passport){
             var userId = req.session.passport && req.session.passport.user;
-            User.findById(userId, "name email", (err,user) => {
+            User.findById(userId, "name email photo age email country", (err,user) => {
                 if(err) return next(err)
                 req.user = user;
                 res.locals.user = user;
