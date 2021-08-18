@@ -9,6 +9,7 @@ var userSchema = new Schema({
     age : {type : Number},
     phone : {type : String},
     country : {type : String},
+    photo : {type : String},
     isVerified : {type : Boolean, default : false}
 }, {timestamps : true})
 

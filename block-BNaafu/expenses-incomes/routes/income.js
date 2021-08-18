@@ -3,7 +3,10 @@ let router = express.Router();
 let Income = require('../models/Income');
 let User = require('../models/User');
 let moment = require('moment');
+var auth = require('../middlewares/Auth')
 
+
+router.use(auth.loggedInUser);
 //render income details page
 router.get('/:id', (req, res, next) => {
     let id = req.params.id;

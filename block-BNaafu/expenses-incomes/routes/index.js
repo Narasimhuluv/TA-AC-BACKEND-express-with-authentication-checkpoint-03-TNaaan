@@ -70,8 +70,14 @@ router.get('/auth/github/callback',
                       }
                       // account successfully verified
                       else{
-                        req.flash('info', 'Your account has been successfully verified')
-                        return res.redirect('/users/login')
+                        // req.flash('info', 'Your account has been successfully verified')
+                        // return res.redirect('/users/login')
+                         res.setHeader('content-type' , 'text/html')
+                         res.end(
+                          `<img style="display : block; width:300px; margin : auto;" src="/images/success.gif" alt="success image" />
+                           <h2 style="text-align:center; font-size:25px;">Your account has been successfully verified</h2>`
+                         )
+
                         // return res.status(200).send('Your account has been successfully verified');
                       }
                   });

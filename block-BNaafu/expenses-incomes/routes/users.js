@@ -7,7 +7,23 @@ var sendgridTransport = require('nodemailer-sendgrid-transport')
 var Token = require('../models/Token')
 var crypto = require('crypto')
 var bcrypt = require('bcrypt')
-var auth = require('../middlewares/Auth')
+var auth = require('../middlewares/Auth');
+var multer = require('multer')
+var path = require('path');
+
+var uploadpath = path.join(__dirname, '../public/uploads')
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadpath)
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + file.originalname)
+  }
+})
+
+const upload = multer({ storage: storage })
 
 
 
@@ -27,8 +43,15 @@ router.get('/register/new', (req,res,next) => {
 //     });
 // });
 
-router.post('/register/new', (req,res,next) => {
+router.post('/register/new', upload.single('photo'),(req,res,next) => {
   // console.log(req.body)
+  if(req.file){
+    let formatName = req.file.filename.split(".").pop();
+    let imageFormats = ['jpg', 'jpeg', 'png', 'gif'];
+    if(imageFormats.includes(formatName)){
+      req.body.photo = req.file.filename
+    }
+  }
   User.create(req.body, (err, user) => {
     if(err) {
       if(err.name === 'MongoError'){
@@ -40,7 +63,7 @@ router.post('/register/new', (req,res,next) => {
         return res.redirect('/users/register/new')
       }
     }
-            // generate token and save
+      // generate token and save
       var token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
       token.save(function (err) {
         if(err){

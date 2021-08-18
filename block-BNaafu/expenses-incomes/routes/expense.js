@@ -3,6 +3,11 @@ let router = express.Router();
 let Expense = require('../models/Expense');
 let User = require('../models/User');
 let moment = require('moment');
+var auth = require('../middlewares/Auth')
+
+
+
+router.use(auth.loggedInUser);
 
 //render expense details page
 router.get('/:id', (req, res, next) => {
