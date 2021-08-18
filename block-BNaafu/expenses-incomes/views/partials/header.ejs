@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Express and Incomes</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/custom.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+    <header class="bg-blue-900 flex justify-between items-center px-5 py-3  ">
+        <a href="" class="text-3xl pl-5">
+            <h2 class="text-white">Expense - Incomes</h2>
+        </a>
+
+        <div class="w-2/12 ">
+            <% if(user) {%>
+                <div class="flex items-center">
+                    <% if(user.photo.includes('http')){%>
+                        <img src="<%= user.photo %> " alt="user Pic" class="w-2/12 h-1/6 mr-2 rounded-full imageHover">
+                        <div class="details">
+                            <p>Name : <%=user.name  %> </p>
+                            <p>Email : <%=user.email  %> </p>
+                        </div>
+                   <% }else{%>
+                        <img src="/uploads/<%=user.photo  %> " alt="user Pic" class="w-2/12 h-1/6 mr-2 rounded-full imageHover">
+                        <div class="details">
+                            <p>Name : <%=user.name  %> </p>
+                            <p>Email : <%=user.email  %> </p>
+                            <p>Age : <%=user.age  %> </p>
+                            <p>Country : <%= user.country  %> </p>
+                        </div>
+                  <% } %> 
+                    <h2 class="text-white font-bold "><%=user.name %> </h2>
+                    <a class="border py-1 px-4 bg-red-500 text-white rounded-xl ml-4" href="/users/logout">Logout</a>
+                </div>
+            <% } else{ %>
+                <div class="flex">
+                    <a href="/users/login">
+                        <h2 class="text-xl border-2 px-4 py-1 rounded-xl text-white font-bold">Login</h2>
+                    </a>
+                    <a href="/users/register/new">
+                        <h2 class="text-xl border-2 px-4 py-1 rounded-xl text-white font-bold ml-4">Register</h2>
+                    </a>
+                </div>
+            <% } %>
+        </div>
+    </header>
+    
+
+    <main>
+        
+    </main>
+</body>
+</html>
